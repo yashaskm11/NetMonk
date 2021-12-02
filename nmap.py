@@ -1,4 +1,5 @@
 import nmap3
-nmap=nmap3.Nmap()
-results = nmap.scan_top_ports("192.168.0.200")
-print(results)
+nmap=nmap3.NmapHostDiscovery()
+results = nmap.nmap_no_portscan("192.168.0.0/24")
+for i in results:
+    print(i)
