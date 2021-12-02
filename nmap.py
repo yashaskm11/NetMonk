@@ -1,4 +1,4 @@
 import nmap3
-nmap=nmap3.Nmap()
-results = nmap.scan_top_ports("192.168.0.200")
+nmap=nmap3.NmapHostDiscovery()
+results = nmap.nmap_arp_discovery("192.168.0.*")
 print(results)
