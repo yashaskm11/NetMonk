@@ -7,7 +7,7 @@ mydb = mysql.connector.connect(
 )
 
 mycursor = mydb.cursor()
-sql = "INSERT INTO testable (slno, name, city) VALUES (%s,%s,%s)"
+sql = "INSERT INTO devices (ip, name) VALUES (%s,%s)"
 val = (12, "Yashas", "Beng")
 mycursor.execute(sql, val)
 mydb.commit()
