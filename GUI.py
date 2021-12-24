@@ -39,6 +39,7 @@ def scan():
 win = tk.Tk()
 sel_ip=tk.StringVar()
 win.title("NetMonk")
+#win.iconbitmap(r'/home/yashaskm11/PyCharmProjects/NetMonk/Images/netmonk-icocon.ico')
 logo = Image.open('/home/yashaskm11/Netmonk/Netmonk.ico')
 logo = ImageTk.PhotoImage(logo)
 logo_label = tk.Label(image=logo)
