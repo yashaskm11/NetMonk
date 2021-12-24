@@ -20,8 +20,8 @@ res = []
 lis = []
 index = count()
 style.use('fivethirtyeight')
-fig=plt.figure()
-ax1=fig.sub_plots(1,1,1)
+#fig=plt.figure()
+#ax1=fig.sub_plots(1,1,1)
 
 
 def pinging(ip):
