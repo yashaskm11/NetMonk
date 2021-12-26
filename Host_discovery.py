@@ -7,7 +7,11 @@ import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 from matplotlib import style
 import numpy as np
-
+#figure=plt.Figure()
+global IP
+def globvar():
+    global resp
+    resp=list()
 mydb = mysql.connector.connect(
     host="localhost",
     user='yashaskm11',
@@ -20,7 +24,6 @@ res = []
 lis = []
 index = count()
 style.use('fivethirtyeight')
-#fig=plt.figure()
 #ax1=fig.sub_plots(1,1,1)
 
 
@@ -41,8 +44,14 @@ flag = True
 
 def animate(i):
     # time.sleep(1)
-    pinging('192.168.0.161')
-    mycursor.execute('Select res,time from pingtime where ip=(%s)', ('192.168.0.161',))
+
+    if i==0:
+        global lis,res
+        res=list()
+        lis=list()
+
+    pinging(IP)
+    mycursor.execute('Select res,time from pingtime where ip=(%s)', (IP,))
     resp = mycursor.fetchall()
 
     res.append(float(resp[i][0]))
@@ -53,8 +62,12 @@ def animate(i):
     # print(resp[i][0])
     i += 1
 
-
-mycursor.execute('truncate pingtime')
-ani = animation.FuncAnimation(plt.gcf(), animate, interval='5000')
-plt.tight_layout()
-plt.show()
+def start(ip):
+    IP=ip
+    mycursor.execute('truncate pingtime')
+    #plt.cla()
+    #plt.title("Monitoring ")
+    ani = animation.FuncAnimation(plt.gcf(), animate, interval='5000')
+    #fig = plt.figure()
+    plt.tight_layout()
+    plt.show()
