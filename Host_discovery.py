@@ -58,6 +58,9 @@ def animate(i):
     # dates.append((i[1]))
     lis.append(resp[i][1])
     plt.cla()
+    plt.xlabel("Time")
+    plt.ylabel("Resposne time in milliseconds")
+    plt.title("Response time of "+str(IP))
     plt.plot(lis, res)
     # print(resp[i][0])
     i += 1

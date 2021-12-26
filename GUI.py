@@ -4,12 +4,16 @@ import temp
 from tkinter.ttk import *
 import time
 import nmap3
+import ssl
+import speedmonk
 from pprint import pprint
 
 from PIL import Image, ImageTk
 global l1,host
 global sel_ip
 l1=['']
+speedmonk.SpeedThread()
+
 def start():
     Host_discovery.IP=sel_ip.get()
     Host_discovery.start(sel_ip.get())
@@ -78,9 +82,12 @@ fl.place(x=0, y=0, relheight=0, relwidth=0)
 win.config(bg="grey")
 
 scan = tk.Button(frame1, text='Scan Network', command=scan)
+speed= tk.Button(frame1, text="Monitor Internet Speeds", command=speedmonk.PlotSpeed)
+
 
 #scan.pack()
 #scan.grid(column=4,row=0,ipady=10)
 #print(l1)
 scan.pack()
+speed.pack()
 win.mainloop()
