@@ -1,19 +1,38 @@
 import tkinter as tk
 from tkinter import *
 import Host_discovery
+import Speed
+import os
+import mysql.connector
+from multiprocessing import Process
 import threading
 from tkinter.ttk import *
 import time
 import nmap3
 import ssl
+import datetime
 import speedmonk
 from pprint import pprint
 
 from PIL import Image, ImageTk
 global l1,host
 global sel_ip
+global flag
 l1=['']
-#t1 = threading.Thread(target=Speed.SpeedT)
+
+
+mydb = mysql.connector.connect(
+    host="localhost",
+    user='yashaskm11',
+    password='4747',
+    database='test'
+)
+mycursor = mydb.cursor(buffered=True)
+
+
+
+
+
 #t1.start()
 #t1.join()
 
@@ -79,7 +98,9 @@ def scan():
     #por.grid(column=4,row=5,ipady=10)
 
 
+t1=threading.Thread(target=Speed.SpeedmonkeyT)
 win = tk.Tk()
+flag=tk.IntVar()
 logo = Image.open('./Images/Netmonk.ico')
 logo = ImageTk.PhotoImage(logo)
 
@@ -98,10 +119,13 @@ logo_label.image = logo
 #                     anchor = "nw")
 #c.pack()
 fl = tk.Label(frame1, image=logo)
+
 fl.place(x=0, y=0, relheight=0, relwidth=0)
 #fl.pack()
 win.config(bg="grey")
-
+rb= tk.Radiobutton(frame1,name="speedtest Daemon YES",text="Yes",value=1,variable=flag).pack()
+rb= tk.Radiobutton(frame1,name="speedtest Daemon NO",text="No",value=0,variable=flag).pack()
+tog=tk.Button(frame1,text="toggle",command=Speed.Threadtoggle).pack()
 scan = tk.Button(frame1, text='Scan Network', command=scan)
 speed= tk.Button(frame1, text="Monitor Internet Speeds", command=speedmonk.PlotSpeed)
 
