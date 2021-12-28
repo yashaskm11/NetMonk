@@ -44,8 +44,14 @@ mycursor1 = mydb1.cursor(buffered=True)
 
 
 def start():
+    host=sel_ip.get()
+    if host=='':
+        can.itemconfigure(can10, state='normal')
+        return
+    else:
+        can.itemconfigure(can10, state='hidden')
     Host_discovery.IP=sel_ip.get()
-    Host_discovery.start(sel_ip.get())
+    Host_discovery.start(host)
     #temp.IP=sel_ip.get()
     #temp.start(sel_ip.get())
     print("Start")
@@ -59,12 +65,19 @@ def port1():
 
 
 def port():
-    global par
+    host=sel_ip.get()
+    if host =='':
+        can.itemconfigure(can10, state='normal')
+        return
+    else:
+        can.itemconfigure(can10, state='hidden')
     win1=Toplevel()
+    win1.title("Netmonk - Scanned Ports")
+    win1.geometry('+1400+300')
     para=tk.StringVar()
     por=tk.Label(win1, textvariable=para)
     por.pack()
-    host=sel_ip.get()
+
     nm=nmap3.Nmap()
     res=nm.nmap_subnet_scan(host)
     #print("------------------------------")
@@ -78,17 +91,19 @@ def port():
     #print("------------------------------\n",host,"<-->",hostname)
     #k=2.0
     par="Open Ports on "+str(host)
+    g=0
     for i in lis:
-        print(i)
         try:
             j=i['service']
             if j['name'] == 'ssh':
+                g=1
                 ssh=tk.Button(win1,text="SSH to Client",command=lambda:SSHClient.SSH(host))
         except:
-            j['name']=''
+            j['name']='unknown'
         par=par+"\n"+i['portid']+" <--> "+j['name']
     para.set(par)
-    ssh.pack()
+    if g:
+        ssh.pack()
     #print("------------------------------")
     #print(lis)
 def scan():
@@ -98,18 +113,23 @@ def scan():
     for i in results:
         if not(i=='runtime' or i=='stats'):
             l1.append(i)
-    l2=tk.Label(frame1,text="Select any IP for port Scan")
-    l2.pack()
+    #l2=tk.Label(frame1,text="Select any IP for port Scan")
+    can.create_text(300,400,anchor="nw",text="Select any IP :",font=("Product Sans",20),fill="white")
+    #l2.pack()
     #l2.grid(column=1,row=2)
     op = tk.OptionMenu(frame1, sel_ip, *l1)
-    op.pack()
+    can5 = can.create_window(500, 400, anchor="nw", window=op,width=150)
+    #op.pack()
     #op.grid(column=4, row=2)
     #op.pack()
-    por=tk.Button(frame1,text='Start Port Scan', command=port)
-    monit = tk.Button(frame1, text='Monitor', command=start)
+    por=tk.Button(frame1,text='Start Port Scan', command=port,font=("Product Sans",))
+    monit = tk.Button(frame1, text='Monitor', command=start,font=("Product Sans",))
     #ssh=tk.Button(frame1,text='SSH',command=lambda:SSHClient.SSH(sel_ip.get()))
-    por.pack()
-    monit.pack()
+
+    can3 = can.create_window(700, 400, anchor="nw", window=por)
+    can6 = can.create_window(900, 400, anchor="nw", window=monit)
+
+    #monit.pack()
     #por.grid(column=4,row=5,ipady=10)
 
 
@@ -117,38 +137,24 @@ def scan():
 #t1.start()
 win = tk.Tk()
 flag=tk.IntVar()
-logo = Image.open('./Images/Netmonk.ico')
-logo = ImageTk.PhotoImage(logo)
-
+bg = PhotoImage(file="Images/Netmonk.png")
+scan_img=PhotoImage(file="Images/SCAN.png")
+global can10
 frame1=tk.Frame(win).pack()
 sel_ip=tk.StringVar()
 win.title("NetMonk")
-#win.iconbitmap(r'/home/yashaskm11/PyCharmProjects/NetMonk/Images/netmonk-icocon.ico')
+win.geometry('1920x1080')
+global can
+can=Canvas(win,width=1920,height=1080)
+can.pack(fill="both",expand=True)
+can.create_image(0,0,anchor="nw",image=bg)
+tog=tk.Button(frame1,text="Diagnose",command=Host_discovery.Diagnose,font=("Product Sans",))
+scan = tk.Button(frame1, text='Scan Network', command=scan,font=("Product Sans",))
+speed= tk.Button(frame1, text="Monitor Internet Speeds", command=speedmonk.PlotSpeed,font=("Product Sans",))
+can7=can.create_window(80,700,anchor="nw",window=speed)
+can10 = can.create_text(450,440,anchor="nw",text="* Please select a IP address",fill="red",font=("Product Sans",12))
+can.itemconfigure(can10,state='hidden')
+can1=can.create_window(1800,700,anchor="nw",window=tog)
+can2=can.create_window(80,400,anchor="nw",window=scan)
 
-logo_label = tk.Label(image=logo)
-logo_label.image = logo
-#logo_label.pack()
-#logo_label.grid(column=0, row=0)
-#win.geometry('1920x1080')
-#c = tk.Canvas(win, bg="gray16", height=1080, width=1920)
-#c.create_image( 0, 0, image = logo,
-#                     anchor = "nw")
-#c.pack()
-fl = tk.Label(frame1, image=logo)
-
-fl.place(x=0, y=0, relheight=0, relwidth=0)
-#fl.pack()
-win.config(bg="grey")
-#rb= tk.Radiobutton(frame1,name="speedtest Daemon YES",text="Yes",value=1,variable=flag).pack()
-#rb= tk.Radiobutton(frame1,name="speedtest Daemon NO",text="No",value=0,variable=flag).pack()
-tog=tk.Button(frame1,text="Diagnose",command=Host_discovery.Diagnose).pack()
-scan = tk.Button(frame1, text='Scan Network', command=scan)
-speed= tk.Button(frame1, text="Monitor Internet Speeds", command=speedmonk.PlotSpeed)
-
-
-#scan.pack()
-#scan.grid(column=4,row=0,ipady=10)
-#print(l1)
-scan.pack()
-speed.pack()
 win.mainloop()

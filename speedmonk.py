@@ -33,7 +33,7 @@ def animate(i):
         ulist.append(resp[-1][0])
         dlist.append(resp[-1][1])
         datelist.append(resp[-1][2])
-    print(ulist,dlist,datelist)
+    #print(ulist,dlist,datelist)
     plt.cla()
     plt.cla()
     plt.cla()
