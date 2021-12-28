@@ -1,6 +1,6 @@
 import mysql.connector
 import datetime
-import Speed
+#import Speed
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 
@@ -9,29 +9,30 @@ import matplotlib.pyplot as plt
 #from matplotlib import style
 #import GUI
 
-mydb = mysql.connector.connect(
+mydb2 = mysql.connector.connect(
     host="localhost",
     user='yashaskm11',
     password='4747',
     database='test'
 )
-mycursor = mydb.cursor(buffered=True)
+mycursor2 = mydb2.cursor(buffered=True)
 ulist=list()
 dlist=list()
 datelist=list()
 
 
 def animate(i):
-    Speed.Speedmonkey()
-    sql1="select * from speedmonk order by time DESC"
-    mycursor.execute(sql1)
-    resp=mycursor.fetchone()
-    print(resp)
-    print(ulist)
-    if not (datelist[-1]==resp[2]):
-        ulist.append(resp[0])
-        dlist.append(resp[1])
-        datelist.append(resp[2])
+    #Speed.Speedmonkey()
+    sql1="select * from speedmonk"
+    mycursor2.execute(sql1)
+    mydb2.commit()
+    resp=mycursor2.fetchall()
+    print(resp[-1])
+    #print(ulist)
+    if not(datelist[-1]==resp[-1][2]):
+        ulist.append(resp[-1][0])
+        dlist.append(resp[-1][1])
+        datelist.append(resp[-1][2])
     print(ulist,dlist,datelist)
     plt.cla()
     plt.cla()
@@ -51,11 +52,11 @@ def animate(i):
     #t1.join()
 
 def PlotSpeed():
-    Speed.Speedmonkey()
+    #Speed.Speedmonkey()
     sql1 = "select * from speedmonk where DATE(time) = (%s)"
     val = datetime.date.today()
-    mycursor.execute(sql1, (val,))
-    resp = mycursor.fetchall()
+    mycursor2.execute(sql1, (val,))
+    resp = mycursor2.fetchall()
     ulist.clear()
     datelist.clear()
     dlist.clear()
@@ -72,4 +73,6 @@ def PlotSpeed():
     ani = animation.FuncAnimation(plt.gcf(), animate, interval='30000')
     plt.tight_layout()
     plt.show()
+
+
 

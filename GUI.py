@@ -1,8 +1,7 @@
 import tkinter as tk
 from tkinter import *
 import Host_discovery
-import Speed
-import os
+import SSHClient
 import mysql.connector
 from multiprocessing import Process
 import threading
@@ -21,16 +20,23 @@ global flag
 l1=['']
 
 
-mydb = mysql.connector.connect(
+mydb1 = mysql.connector.connect(
     host="localhost",
     user='yashaskm11',
     password='4747',
     database='test'
 )
-mycursor = mydb.cursor(buffered=True)
+mycursor1 = mydb1.cursor(buffered=True)
 
 
-
+#def Threadtoggle():
+#    global Threadflag
+#    if flag.get():
+#        Threadflag = True
+#       # t1.start()
+#    else:
+#        Threadflag=False
+#       # t1.join()
 
 
 #t1.start()
@@ -53,6 +59,7 @@ def port1():
 
 
 def port():
+    global par
     win1=Toplevel()
     para=tk.StringVar()
     por=tk.Label(win1, textvariable=para)
@@ -72,9 +79,16 @@ def port():
     #k=2.0
     par="Open Ports on "+str(host)
     for i in lis:
-        j=i['service']
+        print(i)
+        try:
+            j=i['service']
+            if j['name'] == 'ssh':
+                ssh=tk.Button(win1,text="SSH to Client",command=lambda:SSHClient.SSH(host))
+        except:
+            j['name']=''
         par=par+"\n"+i['portid']+" <--> "+j['name']
     para.set(par)
+    ssh.pack()
     #print("------------------------------")
     #print(lis)
 def scan():
@@ -93,12 +107,14 @@ def scan():
     #op.pack()
     por=tk.Button(frame1,text='Start Port Scan', command=port)
     monit = tk.Button(frame1, text='Monitor', command=start)
+    #ssh=tk.Button(frame1,text='SSH',command=lambda:SSHClient.SSH(sel_ip.get()))
     por.pack()
     monit.pack()
     #por.grid(column=4,row=5,ipady=10)
 
 
-t1=threading.Thread(target=Speed.SpeedmonkeyT)
+#t1=threading.Thread(target=Speed.SpeedmonkeyT)
+#t1.start()
 win = tk.Tk()
 flag=tk.IntVar()
 logo = Image.open('./Images/Netmonk.ico')
@@ -123,9 +139,9 @@ fl = tk.Label(frame1, image=logo)
 fl.place(x=0, y=0, relheight=0, relwidth=0)
 #fl.pack()
 win.config(bg="grey")
-rb= tk.Radiobutton(frame1,name="speedtest Daemon YES",text="Yes",value=1,variable=flag).pack()
-rb= tk.Radiobutton(frame1,name="speedtest Daemon NO",text="No",value=0,variable=flag).pack()
-tog=tk.Button(frame1,text="toggle",command=Speed.Threadtoggle).pack()
+#rb= tk.Radiobutton(frame1,name="speedtest Daemon YES",text="Yes",value=1,variable=flag).pack()
+#rb= tk.Radiobutton(frame1,name="speedtest Daemon NO",text="No",value=0,variable=flag).pack()
+tog=tk.Button(frame1,text="Diagnose",command=Host_discovery.Diagnose).pack()
 scan = tk.Button(frame1, text='Scan Network', command=scan)
 speed= tk.Button(frame1, text="Monitor Internet Speeds", command=speedmonk.PlotSpeed)
 

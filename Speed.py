@@ -1,25 +1,15 @@
 import datetime
 import os
 import time
-import GUI
-import gfiberspeedtest
 import mysql.connector
-mydb = mysql.connector.connect(
+mydb3 = mysql.connector.connect(
     host="localhost",
     user='yashaskm11',
     password='4747',
     database='test'
 )
-mycursor = mydb.cursor(buffered=True)
+mycursor3 = mydb3.cursor(buffered=True)
 #st=speedtest.Speedtest()
-
-global Threadflag
-Threadflag=True
-
-
-def SpeedmonkeyT():
-    while Threadflag:
-        Speedmonkey()
 
 
 def Speedmonkey():
@@ -46,8 +36,8 @@ def Speedmonkey():
 
 def pushspeed(val):
     sql="insert into speedmonk values (%s,%s,%s)"
-    mycursor.execute(sql,val)
-    mydb.commit()
+    mycursor3.execute(sql,val)
+    mydb3.commit()
 
 def extract(st):
     fl=''
@@ -61,12 +51,10 @@ def extract(st):
                 fl=fl+i
     return float(fl)
 
-def Threadtoggle():
-    global Threadflag
-    if GUI.flag.get():
-        Threadflag = True
-       # t1.start()
-    else:
-        Threadflag=False
-       # t1.join()
+while(True):
+    Speedmonkey()
+
+
+
+
 

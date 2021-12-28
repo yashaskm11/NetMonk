@@ -1,24 +1,24 @@
 import mysql.connector
+import socket
+from tkinter import messagebox as mb
 from ping3 import ping
 from itertools import count
-import time
 import datetime
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 from matplotlib import style
-import numpy as np
-#figure=plt.Figure()
+
 global IP
 def globvar():
     global resp
     resp=list()
-mydb = mysql.connector.connect(
+mydb4 = mysql.connector.connect(
     host="localhost",
     user='yashaskm11',
     password='4747',
     database='test'
 )
-mycursor = mydb.cursor()
+mycursor4 = mydb4.cursor()
 dates = []
 res = []
 lis = []
@@ -35,8 +35,8 @@ def pinging(ip):
 
 def pushtodb(val):
     sql = "INSERT INTO pingtime VALUES (%s,%s,%s)"
-    mycursor.execute(sql, val)
-    mydb.commit()
+    mycursor4.execute(sql, val)
+    mydb4.commit()
 
 
 flag = True
@@ -51,8 +51,8 @@ def animate(i):
         lis=list()
 
     pinging(IP)
-    mycursor.execute('Select res,time from pingtime where ip=(%s)', (IP,))
-    resp = mycursor.fetchall()
+    mycursor4.execute('Select res,time from pingtime where ip=(%s)', (IP,))
+    resp = mycursor4.fetchall()
 
     res.append(float(resp[i][0]))
     # dates.append((i[1]))
@@ -67,10 +67,27 @@ def animate(i):
 
 def start(ip):
     IP=ip
-    mycursor.execute('truncate pingtime')
+    mycursor4.execute('truncate pingtime')
     #plt.cla()
     #plt.title("Monitoring ")
     ani = animation.FuncAnimation(plt.gcf(), animate, interval='5000')
     #fig = plt.figure()
     plt.tight_layout()
     plt.show()
+
+def Diagnose():
+    try:
+        # connect to the host -- tells us if the host is actually
+        # reachable
+        sock = socket.create_connection(("www.google.com", 80))
+        if sock is not None:
+            #print('Clossing socket')
+            sock.close
+            mb.showinfo('Internet Diagnose Tool', 'You are successfully connected to Internet')
+    except OSError:
+        try:
+            sock =socket.create_connection(('8.8.8.8',53))
+            if sock is not None:
+                mb.showwarning("Internet Diagnose Tool","You are connected to Internet, Check for DNS Issues")
+        except:
+            mb.showerror("Internet Diagnose Tool","You are not connected to Internet, Check your Router or Contact your ISP")
