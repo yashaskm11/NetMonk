@@ -15,7 +15,7 @@ def Speedmonk():
     ul=s.upload()
     dl=s.download()
     ul=round(ul/1e+6,2)
-    dl = round(ul / 1e+6, 2)
+    dl = round(dl / 1e+6, 2)
     timestamp = datetime.datetime.now()
     pushspeed((ul, dl, timestamp))
 
@@ -23,5 +23,9 @@ def pushspeed(val):
     sql="insert into speedmonk values (%s,%s,%s)"
     mycursor31.execute(sql,val)
     mydb31.commit()
+
+def SpeedProc(q):
+    while q.empty():
+        Speedmonk()
 
 Speedmonk()

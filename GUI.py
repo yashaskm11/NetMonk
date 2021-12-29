@@ -137,7 +137,8 @@ def scan():
 #t1=threading.Thread(target=Speed.SpeedmonkeyT)
 #t1.start()
 q=multiprocessing.Queue()
-p=multiprocessing.Process(target=Speed.SpeedProc,args=(q,))# Manual method
+p=threading.Thread(target=Speed.SpeedProc,args=(q,))# Threading
+#p=multiprocessing.Process(target=Speed.SpeedProc,args=(q,))# Manual method
 #p=multiprocessing.Process(target=SpeedAPI.SpeedProc,args=(q,))# API
 p.start()
 win = tk.Tk()
