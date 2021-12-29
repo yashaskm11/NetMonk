@@ -1,6 +1,5 @@
 import datetime
 import os
-import time
 import mysql.connector
 mydb3 = mysql.connector.connect(
     host="localhost",
@@ -32,7 +31,7 @@ def Speedmonkey():
     ul = extract(ul)
     timestamp = datetime.datetime.now()
     pushspeed((ul, dl, timestamp))
-    time.sleep(20)
+    #time.sleep(20)
 
 def pushspeed(val):
     sql="insert into speedmonk values (%s,%s,%s)"
@@ -51,8 +50,10 @@ def extract(st):
                 fl=fl+i
     return float(fl)
 
-while(True):
-    Speedmonkey()
+
+def SpeedProc(q):
+    while q.empty():
+        Speedmonkey()
 
 
 

@@ -3,12 +3,13 @@ from tkinter import *
 import Host_discovery
 import SSHClient
 import mysql.connector
+import multiprocessing
 from multiprocessing import Process
 import threading
 from tkinter.ttk import *
 import time
 import nmap3
-import ssl
+import Speed
 import datetime
 import speedmonk
 from pprint import pprint
@@ -66,7 +67,7 @@ def port1():
 
 def port():
     host=sel_ip.get()
-    if host =='':
+    if host=='':
         can.itemconfigure(can10, state='normal')
         return
     else:
@@ -78,12 +79,12 @@ def port():
     por=tk.Label(win1, textvariable=para)
     por.pack()
 
-    nm=nmap3.Nmap()
-    res=nm.nmap_subnet_scan(host)
+    nm=nmap3.NmapHostDiscovery()
+    #res=nm.nmap_subnet_scan(host)
     #print("------------------------------")
-    #res1=nm.nmap_list_scan(host)
-    #pprint(res1)
-    #pprint(res)
+    res=nm.nmap_portscan_only(host)
+    pprint(res)
+    #print(res)
     li=res[host]
     hostname=li['hostname']
 
@@ -135,6 +136,10 @@ def scan():
 
 #t1=threading.Thread(target=Speed.SpeedmonkeyT)
 #t1.start()
+q=multiprocessing.Queue()
+p=multiprocessing.Process(target=Speed.SpeedProc,args=(q,))# Manual method
+#p=multiprocessing.Process(target=SpeedAPI.SpeedProc,args=(q,))# API
+p.start()
 win = tk.Tk()
 flag=tk.IntVar()
 bg = PhotoImage(file="Images/Netmonk.png")
@@ -151,10 +156,12 @@ can.create_image(0,0,anchor="nw",image=bg)
 tog=tk.Button(frame1,text="Diagnose",command=Host_discovery.Diagnose,font=("Product Sans",))
 scan = tk.Button(frame1, text='Scan Network', command=scan,font=("Product Sans",))
 speed= tk.Button(frame1, text="Monitor Internet Speeds", command=speedmonk.PlotSpeed,font=("Product Sans",))
-can7=can.create_window(80,600,anchor="nw",window=speed)
+can7=can.create_window(80,500,anchor="nw",window=speed)
 can10 = can.create_text(450,440,anchor="nw",text="* Please select a IP address",fill="red",font=("Product Sans",12))
 can.itemconfigure(can10,state='hidden')
-can1=can.create_window(1100,600,anchor="nw",window=tog)
+can1=can.create_window(1100,500,anchor="nw",window=tog)
 can2=can.create_window(80,400,anchor="nw",window=scan)
-
 win.mainloop()
+q.put(0)
+print("Waiting for Background Processes to Close")
+p.join()

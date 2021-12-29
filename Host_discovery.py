@@ -49,7 +49,8 @@ def animate(i):
         global lis,res
         res=list()
         lis=list()
-
+    else:
+        plt.cla()
     pinging(IP)
     mycursor4.execute('Select res,time from pingtime where ip=(%s)', (IP,))
     resp = mycursor4.fetchall()
@@ -57,7 +58,7 @@ def animate(i):
     res.append(float(resp[i][0]))
     # dates.append((i[1]))
     lis.append(resp[i][1])
-    plt.cla()
+
     plt.xlabel("Time")
     plt.ylabel("Resposne time in milliseconds")
     plt.title("Response time of "+str(IP))

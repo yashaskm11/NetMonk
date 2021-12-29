@@ -70,7 +70,7 @@ def PlotSpeed():
     plt.ylabel("Speed in Mbit/sec")
     plt.title("Internet Speed")
     plt.legend()
-    ani = animation.FuncAnimation(plt.gcf(), animate, interval='30000')
+    ani = animation.FuncAnimation(plt.gcf(), animate, interval='5000')
     plt.tight_layout()
     plt.show()
 
