@@ -28,4 +28,4 @@ def SpeedProc(q):
     while q.empty():
         Speedmonk()
 
-Speedmonk()
+#Speedmonk()

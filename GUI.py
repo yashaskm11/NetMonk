@@ -6,10 +6,10 @@ import mysql.connector
 import multiprocessing
 from multiprocessing import Process
 import threading
-from tkinter.ttk import *
+from tkinter import ttk
 import time
 import nmap3
-import Speed
+import SpeedAPI
 import datetime
 import speedmonk
 from pprint import pprint
@@ -55,14 +55,11 @@ def start():
     Host_discovery.start(host)
     #temp.IP=sel_ip.get()
     #temp.start(sel_ip.get())
-    print("Start")
+    #print("Start")
 
 def port1():
-    para = tk.StringVar()
-    por = tk.Label(frame1, textvariable=para)
-    por.pack()
-    par="Hello"
-    para.set(par)
+    t2=threading.Thread(target=port)
+    t2.start()
 
 
 def port():
@@ -83,7 +80,7 @@ def port():
     #res=nm.nmap_subnet_scan(host)
     #print("------------------------------")
     res=nm.nmap_portscan_only(host)
-    pprint(res)
+    #pprint(res)
     #print(res)
     li=res[host]
     hostname=li['hostname']
@@ -107,13 +104,26 @@ def port():
         ssh.pack()
     #print("------------------------------")
     #print(lis)
+
+
 def scan():
     nmap = nmap3.NmapHostDiscovery()
     l1 = list()
+    win3=Toplevel()
+    win3.title("Progress")
+    pb=ttk.Progressbar(win3,length=100,mode="determinate",orient="horizontal")
+    pb.pack()
+    pb['value']=25
     results = nmap.nmap_no_portscan("192.168.0.0/24")
+    pb['value']=50
+    pr=50
     for i in results:
+        pb['value']=pr+1
+        pr+=1
         if not(i=='runtime' or i=='stats'):
             l1.append(i)
+    pb['value']=100
+    #win3.mainloop()
     #l2=tk.Label(frame1,text="Select any IP for port Scan")
     can.create_text(300,400,anchor="nw",text="Select any IP :",font=("Product Sans",20),fill="white")
     #l2.pack()
@@ -123,7 +133,7 @@ def scan():
     #op.pack()
     #op.grid(column=4, row=2)
     #op.pack()
-    por=tk.Button(frame1,text='Start Port Scan', command=port,font=("Product Sans",))
+    por=tk.Button(frame1,text='Start Port Scan', command=port1,font=("Product Sans",))
     monit = tk.Button(frame1, text='Monitor', command=start,font=("Product Sans",))
     #ssh=tk.Button(frame1,text='SSH',command=lambda:SSHClient.SSH(sel_ip.get()))
 
@@ -137,7 +147,7 @@ def scan():
 #t1=threading.Thread(target=Speed.SpeedmonkeyT)
 #t1.start()
 q=multiprocessing.Queue()
-p=threading.Thread(target=Speed.SpeedProc,args=(q,))# Threading
+p=threading.Thread(target=SpeedAPI.SpeedProc,args=(q,))# Threading
 #p=multiprocessing.Process(target=Speed.SpeedProc,args=(q,))# Manual method
 #p=multiprocessing.Process(target=SpeedAPI.SpeedProc,args=(q,))# API
 p.start()

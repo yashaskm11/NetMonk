@@ -4,7 +4,7 @@ import tkinter as tk
 def SSHAuth(host):
     user=v1.get()
     pas=v2.get()
-    print(user,pas)
+    #print(user,pas)
     try:
         client=paramiko.SSHClient()
         client.load_system_host_keys()
