@@ -13,7 +13,7 @@ mydb2 = mysql.connector.connect(
     host="localhost",
     user='yashaskm11',
     password='4747',
-    database='test'
+    database='Netmonk'
 )
 mycursor2 = mydb2.cursor(buffered=True)
 ulist=list()

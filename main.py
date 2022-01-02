@@ -12,7 +12,7 @@ mydb = mysql.connector.connect(
     host="localhost",
     user='yashaskm11',
     password='4747',
-    database='test'
+    database='Netmonk'
 )
 mycursor = mydb.cursor(buffered=True)
 st=speedtest.Speedtest()

@@ -6,7 +6,7 @@ mydb31 = mysql.connector.connect(
     host="localhost",
     user='yashaskm11',
     password='4747',
-    database='test'
+    database='Netmonk'
 )
 mycursor31 = mydb31.cursor(buffered=True)
 
