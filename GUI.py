@@ -159,6 +159,9 @@ global can10
 frame1=tk.Frame(win).pack()
 sel_ip=tk.StringVar()
 win.title("NetMonk")
+#ico=PhotoImage(file="Images/netmonk-ct.png")
+#win.iconphoto(True,ico)
+win.iconbitmap(r"Images/net-rt.ico")
 win.geometry('1280x720')
 global can
 can=Canvas(win,width=1280,height=720)
