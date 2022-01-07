@@ -18,6 +18,7 @@ from PIL import Image, ImageTk
 global l1,host
 global sel_ip
 global flag
+tflag = True
 l1=['']
 
 
@@ -28,6 +29,7 @@ mydb1 = mysql.connector.connect(
     database='Netmonk'
 )
 mycursor1 = mydb1.cursor(buffered=True)
+
 
 
 #def Threadtoggle():
@@ -42,7 +44,31 @@ mycursor1 = mydb1.cursor(buffered=True)
 
 #t1.start()
 #t1.join()
+def avg(r):
+    time.sleep(2)
+    while r.empty():
+        calavg()
 
+def calavg():
+
+    mydb11 = mysql.connector.connect(
+        host="localhost",
+        user='yashaskm11',
+        password='4747',
+        database='test'
+    )
+    mycursor11 = mydb11.cursor()
+    val = datetime.date.today()
+    mycursor11.execute("select avg(download) from speedmonk where DATE(time)= (%s) ",(val,))
+    davg=mycursor11.fetchone()
+    #print(davg)
+    mycursor11.execute("select avg(upload) from speedmonk where DATE(time) = (%s) ",(val,))
+    uavg=mycursor11.fetchone()
+    #print(uavg)
+    st="Download : "+str(round(davg[0],2))+" Upload : "+str(round(uavg[0],2))
+   # print(st)
+    if tflag:
+        v11.set(st)
 
 def start():
     host=sel_ip.get()
@@ -146,12 +172,17 @@ def scan():
 
 #t1=threading.Thread(target=Speed.SpeedmonkeyT)
 #t1.start()
+win = tk.Tk()
+global v11
+v11=tk.StringVar()
 q=multiprocessing.Queue()
+r=multiprocessing.Queue()
 p=threading.Thread(target=SpeedAPI.SpeedProc,args=(q,))# Threading
+p.start()
+p1=threading.Thread(target=avg,args=(r,))# Threading
+p1.start()
 #p=multiprocessing.Process(target=Speed.SpeedProc,args=(q,))# Manual method
 #p=multiprocessing.Process(target=SpeedAPI.SpeedProc,args=(q,))# API
-p.start()
-win = tk.Tk()
 flag=tk.IntVar()
 bg = PhotoImage(file="Images/Netmonk.png")
 scan_img=PhotoImage(file="Images/SCAN.png")
@@ -172,10 +203,16 @@ scan = tk.Button(frame1, text='Scan Network', command=scan,font=("Product Sans",
 speed= tk.Button(frame1, text="Monitor Internet Speeds", command=speedmonk.PlotSpeed,font=("Product Sans",))
 can7=can.create_window(80,500,anchor="nw",window=speed)
 can10 = can.create_text(450,440,anchor="nw",text="* Please select a IP address",fill="red",font=("Product Sans",12))
+can.create_text(585,20,anchor="nw",text="Average Internet Speeds",font=("Product Sans",14))
+av=tk.Label(frame1,textvariable=v11,bg='green')
+can.create_window(605,50,anchor="nw",window=av)
 can.itemconfigure(can10,state='hidden')
 can1=can.create_window(1100,500,anchor="nw",window=tog)
 can2=can.create_window(80,400,anchor="nw",window=scan)
 win.mainloop()
+tflag = False
 q.put(0)
+r.put(0)
 print("Waiting for Background Processes to Close")
 p.join()
+p1.join()
