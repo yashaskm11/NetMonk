@@ -27,7 +27,8 @@ def pushspeed(val):
 def SpeedProc(q,v11):
     while q.empty():
         Speedmonk()
-        calavg(v11)
+        if q.empty():
+            calavg(v11)
 
 def calavg(v11):
     mydb11 = mysql.connector.connect(

@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import *
-
+from tkinter import ttk
 import Host_discovery
 import SSHClient
 import mysql.connector
@@ -108,12 +108,19 @@ def scan():
         if not(i=='runtime' or i=='stats'):
             l1.append(i)
     can.create_text(300,400,anchor="nw",text="Select any IP :",font=("Product Sans",20),fill="white")
-    op = tk.OptionMenu(frame1, sel_ip, *l1)
-    can5 = can.create_window(500, 400, anchor="nw", window=op,width=150)
-    por=tk.Button(frame1,text='Start Port Scan', command=port1,font=("Product Sans",))
-    monit = tk.Button(frame1, text='Monitor', command=start,font=("Product Sans",))
-    can3 = can.create_window(700, 400, anchor="nw", window=por)
-    can6 = can.create_window(900, 400, anchor="nw", window=monit)
+    #op = tk.OptionMenu(frame1, sel_ip, *l1)
+    op1=ttk.Combobox(frame1,textvariable=sel_ip)
+    op1["values"]=tuple(l1)
+    op1["state"]="readonly"
+    can5 = can.create_window(500, 400, anchor="nw", window=op1,width=150,height=30)
+
+    can3 = can.create_image(700, 400, anchor="nw",image=por_img)
+    can.tag_bind(can3, "<Button-1>", lambda e: port1())
+    can6 = can.create_image(900, 400, anchor="nw",image=monitor_img)
+    can.tag_bind(can6, "<Button-1>", lambda e: start())
+    #por=tk.Button(frame1,text='Start Port Scan', command=port1,font=("Product Sans",))
+    #can3 = can.create_window(700, 400, anchor="nw",)
+    #monit = tk.Button(frame1, text='Monitor', command=start,font=("Product Sans",),image= monitor_img)
 
 win = tk.Tk()
 global v11
@@ -123,7 +130,11 @@ p=threading.Thread(target=SpeedAPI.SpeedProc,args=(q,v11))# Thread 1
 p.start()
 flag=tk.IntVar()
 bg = PhotoImage(file="Images/Netmonk.png")
-scan_img=PhotoImage(file="Images/SCAN.png")
+scan_img=PhotoImage(file="Images/Scan_Network.png")
+monitor_img=PhotoImage(file="Images/Monitor.png")
+monitor_int_img=PhotoImage(file="Images/Monitor_Internet_Speeds.png")
+diag_img=PhotoImage(file="Images/Diagnose.png")
+por_img=PhotoImage(file="Images/Start_Port_Scan.png")
 global can10
 frame1=tk.Frame(win).pack()
 sel_ip=tk.StringVar()
@@ -131,20 +142,23 @@ win.title("NetMonk")
 win.iconbitmap(r"Images/net-rt.ico")
 win.geometry('1280x720')
 global can
-can=Canvas(win,width=1280,height=720)
+can=Canvas(win,width=1280,height=720,relief=RAISED)
 can.pack(fill="both",expand=True)
 can.create_image(0,0,anchor="nw",image=bg)
-tog=tk.Button(frame1,text="Diagnose",command=Host_discovery.Diagnose,font=("Product Sans",))
-scan = tk.Button(frame1, text='Scan Network', command=scan,font=("Product Sans",))
-speed= tk.Button(frame1, text="Monitor Internet Speeds", command=speedmonk.PlotSpeed,font=("Product Sans",))
-can7=can.create_window(80,500,anchor="nw",window=speed)
+#tog=tk.Button(frame1,text="Diagnose",command=Host_discovery.Diagnose,font=("Product Sans",),image=diag_img)
+#scan = tk.Button(frame1, text='Scan Network', command=scan,font=("Product Sans",),image=scan_img)
+#speed= tk.Button(frame1, text="Monitor Internet Speeds", command=speedmonk.PlotSpeed,font=("Product Sans",),image=monitor_int_img)
+can7=can.create_image(80,500,anchor="nw",image=monitor_int_img)
+can.tag_bind(can7,"<Button-1>",lambda e:speedmonk.PlotSpeed())
 can10 = can.create_text(450,440,anchor="nw",text="* Please select a IP address",fill="red",font=("Product Sans",12))
 can.create_text(585,20,anchor="nw",text="Average Internet Speeds",font=("Product Sans",14))
 av=tk.Label(frame1,textvariable=v11,bg='green')
 can.create_window(605,50,anchor="nw",window=av)
 can.itemconfigure(can10,state='hidden')
-can1=can.create_window(1100,500,anchor="nw",window=tog)
-can2=can.create_window(80,400,anchor="nw",window=scan)
+can1=can.create_image(1100,500,anchor="nw",image=diag_img)
+can.tag_bind(can1,"<Button-1>",lambda e:Host_discovery.Diagnose())
+can2=can.create_image(80,400,anchor="nw",image=scan_img)
+can.tag_bind(can2,"<Button-1>",lambda e:scan())
 win.mainloop()
 q.put(0)
 print("Waiting for Background Processes to Close")

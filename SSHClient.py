@@ -27,8 +27,7 @@ def SSHAuth(host):
 def SSH(host):
     win2=tk.Toplevel()
     win2.title("Netmonk - SSH")
-    win2.geometry('+1100+300')
-    win2.title("NetMonk")
+    win2.geometry('250x80+1100+300')
     win2.iconbitmap(r"Images/net-rt.ico")
     global v1,v2
     v1=tk.StringVar()
