@@ -1,13 +1,7 @@
 import mysql.connector
 import datetime
-#import Speed
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
-
-
-#st=speedtest.Speedtest()
-#from matplotlib import style
-#import GUI
 
 mydb2 = mysql.connector.connect(
     host="localhost",
@@ -22,18 +16,14 @@ datelist=list()
 
 
 def animate(i):
-    #Speed.Speedmonkey()
     sql1="select * from speedmonk"
     mycursor2.execute(sql1)
     mydb2.commit()
     resp=mycursor2.fetchall()
-    #print(resp[-1])
-    #print(ulist)
     if not(datelist[-1]==resp[-1][2]):
         ulist.append(resp[-1][0])
         dlist.append(resp[-1][1])
         datelist.append(resp[-1][2])
-    #print(ulist,dlist,datelist)
     plt.cla()
     plt.cla()
     plt.cla()
@@ -43,16 +33,10 @@ def animate(i):
     plt.ylabel("Speed in Mbit/sec")
     plt.title("Internet Speed")
     plt.legend()
-    #print(i)
     i+=1
 
-#def SpeedThread():
- #   t1=threading.Thread(target=speedmonkT)
-  #  t1.start()
-    #t1.join()
 
 def PlotSpeed():
-    #Speed.Speedmonkey()
     sql1 = "select * from speedmonk where DATE(time) = (%s)"
     val = datetime.date.today()
     mycursor2.execute(sql1, (val,))

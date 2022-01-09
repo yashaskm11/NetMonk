@@ -8,7 +8,6 @@ mydb3 = mysql.connector.connect(
     database='test'
 )
 mycursor3 = mydb3.cursor(buffered=True)
-#st=speedtest.Speedtest()
 
 
 def Speedmonkey():
@@ -22,7 +21,6 @@ def Speedmonkey():
                 dl=line
             elif i==9:
                 ul=line
-            #print(line,i, end='')
         else:
             break
 

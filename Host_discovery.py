@@ -24,7 +24,6 @@ res = []
 lis = []
 index = count()
 style.use('fivethirtyeight')
-#ax1=fig.sub_plots(1,1,1)
 
 
 def pinging(ip):
@@ -43,8 +42,6 @@ flag = True
 
 
 def animate(i):
-    # time.sleep(1)
-
     if i==0:
         global lis,res
         res=list()
@@ -54,40 +51,30 @@ def animate(i):
     pinging(IP)
     mycursor4.execute('Select res,time from pingtime where ip=(%s)', (IP,))
     resp = mycursor4.fetchall()
-
     res.append(float(resp[i][0]))
-    # dates.append((i[1]))
     lis.append(resp[i][1])
-
     plt.xlabel("Time")
     plt.ylabel("Resposne time in milliseconds")
     plt.title("Response time of "+str(IP))
     plt.plot(lis, res)
-    # print(resp[i][0])
     i += 1
 
 def start(ip):
     IP=ip
     mycursor4.execute('truncate pingtime')
-    #plt.cla()
-    #plt.title("Monitoring ")
     ani = animation.FuncAnimation(plt.gcf(), animate, interval='5000')
-    #fig = plt.figure()
     plt.tight_layout()
     plt.show()
 
 def Diagnose():
     try:
-        # connect to the host -- tells us if the host is actually
-        # reachable
-        sock = socket.create_connection(("www.google.com", 80))
+        sock = socket.create_connection(("www.github.com", 80))
         if sock is not None:
-            #print('Clossing socket')
             sock.close
             mb.showinfo('Internet Diagnose Tool', 'You are successfully connected to Internet')
     except OSError:
         try:
-            sock =socket.create_connection(('8.8.8.8',53))
+            sock =socket.create_connection(('1.1.1.1',53))
             if sock is not None:
                 mb.showwarning("Internet Diagnose Tool","You are connected to Internet, Check for DNS Issues")
         except:
