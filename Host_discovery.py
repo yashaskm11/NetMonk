@@ -8,7 +8,7 @@ import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 from matplotlib import style
 
-global IP
+global IP,IP1
 def globvar():
     global resp
     resp=list()
@@ -55,11 +55,13 @@ def animate(i):
     lis.append(resp[i][1])
     plt.xlabel("Time")
     plt.ylabel("Resposne time in milliseconds")
-    plt.title("Response time of "+str(IP))
+    plt.title("Response time of "+str(IP1))
     plt.plot(lis, res)
     i += 1
 
+
 def start(ip):
+    IP1
     IP=ip
     mycursor4.execute('truncate pingtime')
     ani = animation.FuncAnimation(plt.gcf(), animate, interval='5000')

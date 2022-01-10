@@ -50,22 +50,31 @@ def calavg():
 
 def start():
     host=sel_ip.get()
-    if host=='':
+    host1=str_ip(host)
+    if host1=='' or host1==None:
         can.itemconfigure(can10, state='normal')
         return
     else:
         can.itemconfigure(can10, state='hidden')
-    Host_discovery.IP=sel_ip.get()
-    Host_discovery.start(host)
+    Host_discovery.IP1=host
+    Host_discovery.IP = host1
+    Host_discovery.start(host1)
 
 def port1():
     t2=threading.Thread(target=port)
     t2.start()
 
+def str_ip(host):
+    ip=""
+    for i in host:
+        if i==" ":
+            return ip
+        ip+=str(i)
 
 def port():
-    host=sel_ip.get()
-    if host=='':
+    host1=sel_ip.get()
+    host=str_ip(host1)
+    if host=='' or host==None:
         can.itemconfigure(can10, state='normal')
         return
     else:
@@ -82,7 +91,7 @@ def port():
     li=res[host]
     hostname=li['hostname']
     lis=li['ports']
-    par="Open Ports on "+str(host)
+    par="Open Ports on "+str(host1)
     g=0
     for i in lis:
         try:
@@ -106,17 +115,29 @@ def scan():
     for i in results:
         pr+=1
         if not(i=='runtime' or i=='stats'):
-            l1.append(i)
-    can.create_text(300,400,anchor="nw",text="Select any IP :",font=("Product Sans",20),fill="white")
+            ip = results[i]
+            if 'macaddress' in ip:
+                mac = ip['macaddress']
+                if not mac is None:
+                    if 'vendor' in mac:
+                        name = mac['vendor']
+                    else:
+                        name="unknown"
+                else:
+                    name="unknown"
+            else:
+                name="unknown"
+            l1.append(i+" - "+str(name))
+    can.create_text(220,400,anchor="nw",text="Select any IP :",font=("Product Sans",20),fill="white")
     #op = tk.OptionMenu(frame1, sel_ip, *l1)
     op1=ttk.Combobox(frame1,textvariable=sel_ip)
     op1["values"]=tuple(l1)
     op1["state"]="readonly"
-    can5 = can.create_window(500, 400, anchor="nw", window=op1,width=150,height=30)
+    can5 = can.create_window(400, 400, anchor="nw", window=op1,width=300,height=30)
 
-    can3 = can.create_image(700, 400, anchor="nw",image=por_img)
+    can3 = can.create_image(800, 400, anchor="nw",image=por_img)
     can.tag_bind(can3, "<Button-1>", lambda e: port1())
-    can6 = can.create_image(900, 400, anchor="nw",image=monitor_img)
+    can6 = can.create_image(1000, 400, anchor="nw",image=monitor_img)
     can.tag_bind(can6, "<Button-1>", lambda e: start())
     #por=tk.Button(frame1,text='Start Port Scan', command=port1,font=("Product Sans",))
     #can3 = can.create_window(700, 400, anchor="nw",)
