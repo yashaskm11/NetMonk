@@ -10,6 +10,14 @@ mydb31 = mysql.connector.connect(
 )
 mycursor31 = mydb31.cursor(buffered=True)
 
+
+def SpeedProc(q,v11):
+    while q.empty():
+        Speedmonk()
+        if q.empty():
+            calavg(v11)
+
+
 def Speedmonk():
     s=speedtest.Speedtest()
     ul=s.upload()
@@ -19,16 +27,12 @@ def Speedmonk():
     timestamp = datetime.datetime.now()
     pushspeed((ul, dl, timestamp))
 
+
 def pushspeed(val):
     sql="insert into speedmonk values (%s,%s,%s)"
     mycursor31.execute(sql,val)
     mydb31.commit()
 
-def SpeedProc(q,v11):
-    while q.empty():
-        Speedmonk()
-        if q.empty():
-            calavg(v11)
 
 def calavg(v11):
     mydb11 = mysql.connector.connect(
