@@ -9,9 +9,7 @@ import matplotlib.pyplot as plt
 from matplotlib import style
 
 global IP,IP1
-def globvar():
-    global resp
-    resp=list()
+
 mydb4 = mysql.connector.connect(
     host="localhost",
     user='yashaskm11',
@@ -25,20 +23,13 @@ lis = []
 index = count()
 style.use('fivethirtyeight')
 
-
-def pinging(ip):
-    res = ping(ip, unit='ms')
-    timestamp = datetime.datetime.now()
-    pushtodb((ip, res, timestamp))
-
-
-def pushtodb(val):
-    sql = "INSERT INTO pingtime VALUES (%s,%s,%s)"
-    mycursor4.execute(sql, val)
-    mydb4.commit()
-
-
-flag = True
+def start(ip):
+    IP1
+    IP=ip
+    mycursor4.execute('truncate pingtime')
+    ani = animation.FuncAnimation(plt.gcf(), animate, interval='5000')
+    plt.tight_layout()
+    plt.show()
 
 
 def animate(i):
@@ -60,19 +51,23 @@ def animate(i):
     i += 1
 
 
-def start(ip):
-    IP1
-    IP=ip
-    mycursor4.execute('truncate pingtime')
-    ani = animation.FuncAnimation(plt.gcf(), animate, interval='5000')
-    plt.tight_layout()
-    plt.show()
+def pinging(ip):
+    res = ping(ip, unit='ms')
+    timestamp = datetime.datetime.now()
+    pushtodb((ip, res, timestamp))
+
+
+def pushtodb(val):
+    sql = "INSERT INTO pingtime VALUES (%s,%s,%s)"
+    mycursor4.execute(sql, val)
+    mydb4.commit()
+
 
 def Diagnose():
     try:
         sock = socket.create_connection(("www.github.com", 80))
         if sock is not None:
-            sock.close
+            sock.close()
             mb.showinfo('Internet Diagnose Tool', 'You are successfully connected to Internet')
     except OSError:
         try:
