@@ -76,7 +76,7 @@ def Diagnose():
             mb.showinfo('Internet Diagnose Tool', 'You are successfully connected to Internet')
     except OSError:
         try:
-            sock =socket.create_connection(('1.1.1.1',53))
+            sock =socket.create_connection(('8.8.8.8',53))
             if sock is not None:
                 mb.showwarning("Internet Diagnose Tool","You are connected to Internet, Check for DNS Issues")
         except:

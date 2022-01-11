@@ -10,7 +10,6 @@ import datetime
 import nmap3
 import SpeedAPI
 import speedmonk
-
 global l1,host
 global sel_ip
 global flag
@@ -25,28 +24,6 @@ mydb1 = mysql.connector.connect(
 )
 mycursor1 = mydb1.cursor(buffered=True)
 
-def avg(tflag):
-    while tflag():
-        calavg()
-
-def calavg():
-
-    mydb11 = mysql.connector.connect(
-        host="localhost",
-        user='yashaskm11',
-        password='4747',
-        database='Netmonk'
-    )
-    mycursor11 = mydb11.cursor()
-    val = datetime.date.today()
-    mycursor11.execute("select avg(download) from speedmonk where DATE(time)= (%s) ",(val,))
-    davg=mycursor11.fetchone()
-    mycursor11.execute("select avg(upload) from speedmonk where DATE(time) = (%s) ",(val,))
-    uavg=mycursor11.fetchone()
-    st="Download : "+str(round(davg[0],2))+" Upload : "+str(round(uavg[0],2))
-    global tflag
-    if tflag:
-        v11.set(st)
 
 def start():
     host=sel_ip.get()
@@ -60,6 +37,7 @@ def start():
     Host_discovery.IP = host1
     Host_discovery.start(host1)
 
+
 def port1():
     t2=threading.Thread(target=port)
     t2.start()
@@ -70,6 +48,7 @@ def str_ip(host):
         if i==" ":
             return ip
         ip+=str(i)
+
 
 def port():
     host1=sel_ip.get()
@@ -107,6 +86,7 @@ def port():
     if g:
         ssh.pack()
 
+
 def scan():
     nmap = nmap3.NmapHostDiscovery()
     l1 = list()
@@ -129,7 +109,6 @@ def scan():
                 name="unknown"
             l1.append(i+" - "+str(name))
     can.create_text(220,400,anchor="nw",text="Select any IP :",font=("Product Sans",20),fill="white")
-    #op = tk.OptionMenu(frame1, sel_ip, *l1)
     op1=ttk.Combobox(frame1,textvariable=sel_ip)
     op1["values"]=tuple(l1)
     op1["state"]="readonly"
@@ -142,6 +121,7 @@ def scan():
     #por=tk.Button(frame1,text='Start Port Scan', command=port1,font=("Product Sans",))
     #can3 = can.create_window(700, 400, anchor="nw",)
     #monit = tk.Button(frame1, text='Monitor', command=start,font=("Product Sans",),image= monitor_img)
+
 
 win = tk.Tk()
 global v11
@@ -161,7 +141,7 @@ frame1=tk.Frame(win).pack()
 sel_ip=tk.StringVar()
 win.title("NetMonk")
 win.iconbitmap(r"Images/net-rt.ico")
-win.geometry('1280x720')
+win.geometry('1366x768+0+0')
 global can
 can=Canvas(win,width=1280,height=720,relief=RAISED)
 can.pack(fill="both",expand=True)
