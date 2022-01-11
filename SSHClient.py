@@ -1,6 +1,8 @@
 import paramiko
 from tkinter import messagebox as mb
 import tkinter as tk
+
+
 def SSHAuth(host):
     us=v1.get()
     pa=v2.get()
@@ -32,9 +34,9 @@ def SSH(host):
     global v1,v2
     v1=tk.StringVar()
     v2=tk.StringVar()
-    e1=tk.Entry(win2,textvariable=v1).grid(column=1,row=0)
-    e2 = tk.Entry(win2, textvariable=v2,show="*").grid(column=1,row=1)
-    l1=tk.Label(win2,text="Username").grid(column=0,row=0)
-    l2 = tk.Label(win2, text="Password").grid(column=0,row=1)
-    b1=tk.Button(win2,text="Login",command=lambda:SSHAuth(host)).grid(column=1,row=2)
+    tk.Entry(win2,textvariable=v1).grid(column=1,row=0)
+    tk.Entry(win2, textvariable=v2,show="*").grid(column=1,row=1)
+    tk.Label(win2,text="Username").grid(column=0,row=0)
+    tk.Label(win2, text="Password").grid(column=0,row=1)
+    tk.Button(win2,text="Login",command=lambda:SSHAuth(host)).grid(column=1,row=2)
     win2.mainloop()
